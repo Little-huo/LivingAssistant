@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:padding="16dp"
+    android:background="#b8f1ed"
+    android:gravity="center_vertical">
+
+    <ImageView
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:contentDescription="Weather Icon"
+        android:scaleType="centerCrop"
+        android:src="@drawable/weather_card"
+        android:id="@+id/widget_weather_icon" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginStart="16dp">
+
+        <TextView
+            android:id="@+id/widget_temperature_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="25°C"
+            android:textColor="@android:color/black"
+            android:textSize="25sp"
+            android:fontFamily="@font/simkai" />
+
+        <TextView
+            android:id="@+id/widget_weather_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="晴天"
+            android:textColor="@android:color/black"
+            android:textSize="16sp"
+            android:fontFamily="@font/simkai" />
+    </LinearLayout>
+
+</LinearLayout>

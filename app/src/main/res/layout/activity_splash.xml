@@ -1,0 +1,46 @@
+<!-- activity_splash.xml -->
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#44c1c3">
+
+    <!-- Logo 图片居中显示 -->
+    <ImageView
+        android:id="@+id/logo"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="80dp"
+        android:src="@drawable/splash_img" />
+
+    <!-- App 名称 -->
+    <TextView
+        android:id="@+id/app_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="智能生活助手"
+        android:textSize="28sp"
+        android:textColor="@android:color/white"
+        android:layout_below="@id/logo"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="24dp"
+        android:textStyle="bold"
+        android:fontFamily="@font/simkai"/>
+
+    <!-- App 功能简介或使用提示 -->
+    <TextView
+        android:id="@+id/app_description"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="简化您的日常事务管理，为您提供日程、健康和天气等一站式服务。\n\n让科技助力您的高效生活，轻松掌控每一天。"
+        android:textSize="16sp"
+        android:textColor="@android:color/white"
+        android:layout_below="@id/app_name"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="32dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:padding="16dp"
+        android:textAlignment="center"
+        />
+</RelativeLayout>
