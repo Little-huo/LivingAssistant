@@ -23,6 +23,24 @@
         android:layout_marginTop="24dp"
         android:fontFamily="@font/simkai"/>
 
+    <!-- More Button as an Icon in the Top-Right Corner -->
+    <ImageButton
+        android:id="@+id/more_button"
+        android:layout_width="34dp"
+        android:layout_height="34dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:src="@drawable/ic_more"
+    android:contentDescription="更多"
+    app:layout_constraintTop_toTopOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    android:layout_marginTop="10dp"
+    android:layout_marginEnd="16dp"
+    android:tint="#ae716e"
+    android:scaleType="centerInside"
+     />  <!-- 增加内边距 -->
+
+
+    <!-- Weather Card -->
     <androidx.cardview.widget.CardView
         android:id="@+id/weather_card"
         android:layout_width="0dp"
@@ -63,7 +81,6 @@
             <LinearLayout
                 android:layout_width="200dp"
                 android:layout_height="wrap_content"
-
                 android:orientation="horizontal"
                 android:gravity="center_vertical"
                 android:layout_marginLeft="5dp">
@@ -127,7 +144,6 @@
             </LinearLayout>
         </LinearLayout>
     </androidx.cardview.widget.CardView>
-
 
     <!-- Schedule Card -->
     <androidx.cardview.widget.CardView

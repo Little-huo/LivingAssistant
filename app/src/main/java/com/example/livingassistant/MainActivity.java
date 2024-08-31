@@ -10,6 +10,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -47,6 +48,12 @@ public class MainActivity extends AppCompatActivity {
         View weatherCard = findViewById(R.id.weather_card);
         View scheduleCard = findViewById(R.id.schedule_card);
         View healthCard = findViewById(R.id.health_card);
+
+        ImageButton moreButton = findViewById(R.id.more_button);
+        moreButton.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, MoreActivity.class);
+            startActivity(intent);
+        });
 
         weatherTextView = findViewById(R.id.weather_text);
         temperatureTextView = findViewById(R.id.temperature_text);
