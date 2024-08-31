@@ -178,6 +178,52 @@
     </androidx.cardview.widget.CardView>
 
     <!-- Health Data Card -->
+<!--    <androidx.cardview.widget.CardView-->
+<!--        android:id="@+id/health_card"-->
+<!--        android:layout_width="0dp"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        app:cardCornerRadius="12dp"-->
+<!--        app:cardElevation="8dp"-->
+<!--        app:layout_constraintTop_toBottomOf="@id/schedule_card"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        android:layout_marginTop="16dp"-->
+<!--        android:layout_marginHorizontal="16dp"-->
+<!--        app:cardBackgroundColor="#89CFF0">-->
+
+<!--        <LinearLayout-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:orientation="horizontal"-->
+<!--            android:padding="16dp"-->
+<!--            android:gravity="center_vertical">-->
+
+<!--            <androidx.cardview.widget.CardView-->
+<!--                android:layout_width="60dp"-->
+<!--                android:layout_height="60dp"-->
+<!--                app:cardCornerRadius="12dp"-->
+<!--                app:cardElevation="0dp"-->
+<!--                app:cardBackgroundColor="@android:color/white"-->
+<!--                android:layout_marginEnd="16dp">-->
+
+<!--                <ImageView-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="match_parent"-->
+<!--                    android:src="@drawable/health_img"-->
+<!--                    android:contentDescription="Weather Icon"-->
+<!--                    android:scaleType="centerCrop" />-->
+<!--            </androidx.cardview.widget.CardView>-->
+
+<!--            <TextView-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:gravity="center_vertical"-->
+<!--                android:text="健康数据"-->
+<!--                android:textColor="@android:color/black"-->
+<!--                android:textSize="20sp"-->
+<!--                android:fontFamily="@font/simkai"/>-->
+<!--        </LinearLayout>-->
+<!--    </androidx.cardview.widget.CardView>-->
     <androidx.cardview.widget.CardView
         android:id="@+id/health_card"
         android:layout_width="0dp"
@@ -210,18 +256,19 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:src="@drawable/health_img"
-                    android:contentDescription="Weather Icon"
+                    android:contentDescription="Health Icon"
                     android:scaleType="centerCrop" />
             </androidx.cardview.widget.CardView>
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:text="健康数据"
-                android:textColor="@android:color/black"
-                android:textSize="20sp"
-                android:fontFamily="@font/simkai"/>
+                android:id="@+id/step_count_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:text="步数: 0"
+            android:textColor="@android:color/black"
+            android:textSize="20sp"
+            android:fontFamily="@font/simkai"/>
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 
