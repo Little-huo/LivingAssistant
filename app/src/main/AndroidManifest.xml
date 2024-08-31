@@ -33,6 +33,8 @@
 <!--        <activity-->
 <!--            android:name=".MainActivity"-->
 <!--            android:exported="false" />-->
+        <activity android:name=".StepCounterActivity"
+            android:exported="false"/>
         <activity
             android:name=".MainActivity"
             android:exported="true">

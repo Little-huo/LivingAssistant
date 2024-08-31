@@ -65,7 +65,7 @@ public class WeatherDetailActivity extends AppCompatActivity {
     }
     private int getWeatherIconResourceId(String weather) {
         switch (weather) {
-            case "晴天":
+            case "晴":
                 return R.drawable.ic_qingtian;
             case "多云":
                 return R.drawable.ic_duoyun;

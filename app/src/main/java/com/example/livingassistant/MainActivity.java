@@ -72,6 +72,11 @@ public class MainActivity extends AppCompatActivity {
             Intent intent = new Intent(MainActivity.this, ScheduleActivity.class);
             startActivity(intent);
         });
+
+        healthCard.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, StepCounterActivity.class);
+            startActivity(intent);
+        });
     }
 
     private void applyAnimation(View view, int animatorResId) {
@@ -106,7 +111,7 @@ public class MainActivity extends AppCompatActivity {
 
         private int getWeatherIconResourceId(String weather) {
             switch (weather) {
-                case "晴天":
+                case "晴":
                     return R.drawable.ic_qingtian;
                 case "多云":
                     return R.drawable.ic_duoyun;
