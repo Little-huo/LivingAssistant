@@ -5,7 +5,6 @@
     android:padding="16dp"
     android:background="@color/bg">
 
-    <!-- 步数 TextView -->
     <TextView
         android:id="@+id/step_count_text_view"
         android:layout_width="wrap_content"

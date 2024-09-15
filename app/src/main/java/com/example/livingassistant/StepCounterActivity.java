@@ -31,7 +31,6 @@ public class StepCounterActivity extends AppCompatActivity implements StepCounte
 
         stepCountTextView = findViewById(R.id.step_count_text_view);
 
-        // Check and request permissions
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACTIVITY_RECOGNITION)
                 != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACTIVITY_RECOGNITION},
@@ -86,10 +85,8 @@ public class StepCounterActivity extends AppCompatActivity implements StepCounte
         try (FileOutputStream fos = new FileOutputStream(file)) {
             fos.write(String.valueOf(stepCount).getBytes());
             fos.flush();
-//            Toast.makeText(this, "步数已保存.", Toast.LENGTH_SHORT).show();
         } catch (IOException e) {
             e.printStackTrace();
-//            Toast.makeText(this, "保存步数失败.", Toast.LENGTH_SHORT).show();
         }
     }
 

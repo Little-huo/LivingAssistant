@@ -7,7 +7,6 @@
     android:padding="16dp"
     android:background="#F5F5F5">
 
-    <!-- 包含标题、时间、内容和删除按钮的卡片布局 -->
     <androidx.cardview.widget.CardView
         android:id="@+id/card_view"
         android:layout_width="0dp"
@@ -28,7 +27,6 @@
             android:background="#FFF7D1"
             >
 
-            <!-- 标题 -->
             <TextView
                 android:id="@+id/detail_title"
                 android:layout_width="match_parent"
@@ -41,7 +39,6 @@
                 android:textStyle="bold"
                 android:fontFamily="@font/simkai"/>
 
-            <!-- 时间 -->
             <TextView
                 android:id="@+id/detail_time"
                 android:layout_width="match_parent"
@@ -51,20 +48,18 @@
                 android:textColor="#666666"
                 android:textSize="16sp" />
 
-            <!-- 分隔线 -->
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_marginBottom="16dp"
                 android:background="#E0E0E0" />
 
-            <!-- 主要内容 -->
             <TextView
                 android:id="@+id/detail_event"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="24dp"
-                android:text="这里是主要内容的显示区域。"
+                android:text="主要内容"
                 android:textColor="#333333"
                 android:textSize="18sp"
                 android:fontFamily="@font/simkai"/>

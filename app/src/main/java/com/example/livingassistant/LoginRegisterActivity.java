@@ -1,6 +1,7 @@
 package com.example.livingassistant;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -85,6 +86,12 @@ public class LoginRegisterActivity extends AppCompatActivity {
 
     private void loginUser(String email, String password) {
         if (dbHelper.checkUser(email, password)) {
+            // 登录成功，存储用户信息
+            SharedPreferences sharedPreferences = getSharedPreferences("user_prefs", MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putString("current_user_email", email);
+            editor.apply();
+
             Toast.makeText(LoginRegisterActivity.this, "登录成功", Toast.LENGTH_SHORT).show();
             Intent intent = new Intent(LoginRegisterActivity.this, MainActivity.class);
             startActivity(intent);
@@ -93,6 +100,7 @@ public class LoginRegisterActivity extends AppCompatActivity {
             Toast.makeText(LoginRegisterActivity.this, "登录失败，邮箱或密码错误", Toast.LENGTH_SHORT).show();
         }
     }
+
 
     private void registerUser(String email, String password) {
         long result = dbHelper.addUser(email, password);

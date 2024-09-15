@@ -18,7 +18,7 @@ public class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.Schedu
     private List<ScheduleItem> scheduleList;
     private OnDeleteClickListener onDeleteClickListener;
 
-    public static final int REQUEST_CODE_DETAIL = 1;  // 声明请求码
+    public static final int REQUEST_CODE_DETAIL = 1;
 
     public ScheduleAdapter(List<ScheduleItem> scheduleList, OnDeleteClickListener listener) {
         this.scheduleList = scheduleList;
@@ -43,15 +43,14 @@ public class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.Schedu
         holder.scheduleEvent.setText(item.getEvent());
 //        holder.scheduleTime.setText(item.getTime());
 
-        // 设置卡片点击事件
         holder.itemView.setOnClickListener(v -> {
             Intent intent = new Intent(v.getContext(), DetailActivity.class);
-            // 传递 ID 和其他数据
+            // 传递数据
             intent.putExtra("EXTRA_ID", item.getId());
             intent.putExtra("EXTRA_TITLE", item.getTitle());
             intent.putExtra("EXTRA_EVENT", item.getEvent());
             intent.putExtra("EXTRA_TIME", item.getTime());
-            // 启动 DetailActivity，传递请求码
+
             ((AppCompatActivity) v.getContext()).startActivityForResult(intent, REQUEST_CODE_DETAIL);
         });
 

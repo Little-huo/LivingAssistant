@@ -1,7 +1,7 @@
 package com.example.livingassistant;
 
 public class ScheduleItem {
-    private static int idCounter = 0;  // 用于生成唯一的 ID
+    private static int idCounter = 0;
 
     private int id;
     private String title;
@@ -9,7 +9,7 @@ public class ScheduleItem {
     private String time;
 
     public ScheduleItem(String title, String event, String time) {
-        this.id = idCounter++;  // 为每个新项分配一个唯一 ID
+        this.id = idCounter++;
         this.title = title;
         this.event = event;
         this.time = time;

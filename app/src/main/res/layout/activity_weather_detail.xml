@@ -7,7 +7,6 @@
     android:padding="16dp"
     android:background="#b8f1ed">
 
-    <!-- 城市和省份 -->
     <TextView
         android:id="@+id/city_province_text"
         android:layout_width="0dp"
@@ -21,7 +20,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:fontFamily="@font/simkai"/>
 
-    <!-- 天气描述 -->
     <TextView
         android:id="@+id/weather_description_text"
         android:layout_width="0dp"
@@ -35,7 +33,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:fontFamily="@font/simkai"/>
 
-    <!-- 温度信息 -->
     <TextView
         android:id="@+id/temperature_text"
         android:layout_width="0dp"
@@ -48,9 +45,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toStartOf="@id/weather_icon"/>
 
-    <!-- 天气图标 -->
 
-    <!-- 风向信息卡片 -->
 
     <ImageView
         android:id="@+id/weather_icon"

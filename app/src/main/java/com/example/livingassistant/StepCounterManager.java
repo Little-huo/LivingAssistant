@@ -45,6 +45,6 @@ public class StepCounterManager implements SensorEventListener {
 
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
-        // Handle sensor accuracy changes if needed
+
     }
 }

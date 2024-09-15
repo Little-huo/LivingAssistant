@@ -8,7 +8,6 @@
     android:padding="16dp"
     android:background="#f1ccb8">
 
-    <!-- Header TextView -->
     <TextView
         android:id="@+id/header"
         android:layout_width="wrap_content"
@@ -23,7 +22,6 @@
         android:layout_marginTop="24dp"
         android:fontFamily="@font/simkai"/>
 
-    <!-- More Button as an Icon in the Top-Right Corner -->
     <ImageButton
         android:id="@+id/more_button"
         android:layout_width="34dp"
@@ -92,7 +90,6 @@
                     android:orientation="vertical"
                     android:gravity="center">
 
-                    <!-- Temperature -->
                     <TextView
                         android:id="@+id/temperature_text"
                         android:layout_width="wrap_content"
@@ -109,7 +106,6 @@
                     android:orientation="vertical"
                     android:gravity="center">
 
-                    <!-- Humidity -->
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -119,7 +115,6 @@
                         android:fontFamily="@font/simkai"
                         android:layout_marginRight="10dp"/>
 
-                    <!-- Wind Speed -->
                     <TextView
                         android:id="@+id/weather_text"
                         android:layout_width="wrap_content"
@@ -145,7 +140,6 @@
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 
-    <!-- Schedule Card -->
     <androidx.cardview.widget.CardView
         android:id="@+id/schedule_card"
         android:layout_width="0dp"
@@ -193,7 +187,6 @@
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 
-    <!-- Health Data Card -->
     <androidx.cardview.widget.CardView
         android:id="@+id/health_card"
         android:layout_width="0dp"
@@ -241,7 +234,6 @@
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 
-    <!-- Footer TextView -->
     <TextView
         android:id="@+id/footer"
         android:layout_width="wrap_content"
