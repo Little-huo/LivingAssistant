@@ -6,12 +6,12 @@ import retrofit2.http.POST;
 
 public interface ApiService {
 
-    @POST("/add")
-    Call<Void> register(@Body User user);
+    @POST("/auth/add")
+    Call<Result> register(@Body User user);
 
-    @POST("/login")
-    Call<Void> login(@Body LoginRequest loginRequest);
+    @POST("/auth/login")
+    Call<Result> login(@Body LoginRequest loginRequest);
 
     @POST("/updatePassword")
-    Call<Void> updatePassword(@Body PasswordUpdateDTO passwordUpdateDTO);
+    Call<Result> updatePassword(@Body PasswordUpdateDTO passwordUpdateDTO);
 }

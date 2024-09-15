@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -81,54 +82,118 @@ public class LoginRegisterActivity extends AppCompatActivity {
         }
     }
 
+//    private void loginUser(String email, String password) {
+//        LoginRequest loginRequest = new LoginRequest(email, password);
+//        Log.d("loginUser", loginRequest.getEmail()+loginRequest.getPassword());
+//
+//        RetrofitClient.getInstance().getApiService().login(loginRequest).enqueue(new Callback<Void>() {
+//            @Override
+//            public void onResponse(Call<Void> call, Response<Void> response) {
+//                if (response.isSuccessful()) {
+//                    SharedPreferences sharedPreferences = getSharedPreferences("user_prefs", MODE_PRIVATE);
+//                    SharedPreferences.Editor editor = sharedPreferences.edit();
+//                    editor.putString("current_user_email", email);
+//                    editor.apply();
+//
+//                    Toast.makeText(LoginRegisterActivity.this, "登录成功", Toast.LENGTH_SHORT).show();
+//                    Intent intent = new Intent(LoginRegisterActivity.this, MainActivity.class);
+//                    startActivity(intent);
+//                    finish();
+//                } else {
+//                    Toast.makeText(LoginRegisterActivity.this, "登录失败", Toast.LENGTH_SHORT).show();
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(Call<Void> call, Throwable t) {
+//                Toast.makeText(LoginRegisterActivity.this, "登录请求失败", Toast.LENGTH_SHORT).show();
+//            }
+//        });
+//    }
+
     private void loginUser(String email, String password) {
         LoginRequest loginRequest = new LoginRequest(email, password);
+        Log.d("loginUser", loginRequest.getEmail() + loginRequest.getPassword());
 
-        RetrofitClient.getInstance().getApiService().login(loginRequest).enqueue(new Callback<Void>() {
+        RetrofitClient.getInstance().getApiService().login(loginRequest).enqueue(new Callback<Result>() {
             @Override
-            public void onResponse(Call<Void> call, Response<Void> response) {
-                if (response.isSuccessful()) {
-                    SharedPreferences sharedPreferences = getSharedPreferences("user_prefs", MODE_PRIVATE);
-                    SharedPreferences.Editor editor = sharedPreferences.edit();
-                    editor.putString("current_user_email", email);
-                    editor.apply();
+            public void onResponse(Call<Result> call, Response<Result> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    Result result = response.body();
+                    if (result.getCode() == 1) {  // 判断 code 是否为 1，表示成功
+                        SharedPreferences sharedPreferences = getSharedPreferences("user_prefs", MODE_PRIVATE);
+                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                        editor.putString("current_user_email", email);
+                        editor.apply();
 
-                    Toast.makeText(LoginRegisterActivity.this, "登录成功", Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(LoginRegisterActivity.this, MainActivity.class);
-                    startActivity(intent);
-                    finish();
+                        Toast.makeText(LoginRegisterActivity.this, "登录成功: " + result.getMsg(), Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(LoginRegisterActivity.this, MainActivity.class);
+                        startActivity(intent);
+                        finish();
+                    } else {
+                        Toast.makeText(LoginRegisterActivity.this, "登录失败: " + result.getMsg(), Toast.LENGTH_SHORT).show();
+                    }
                 } else {
-                    Toast.makeText(LoginRegisterActivity.this, "登录失败", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(LoginRegisterActivity.this, "登录失败: 无效的响应", Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
-            public void onFailure(Call<Void> call, Throwable t) {
-                Toast.makeText(LoginRegisterActivity.this, "登录请求失败", Toast.LENGTH_SHORT).show();
+            public void onFailure(Call<Result> call, Throwable t) {
+                Toast.makeText(LoginRegisterActivity.this, "登录请求失败: " + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }
 
-    private void registerUser(String email, String password) {
-        User user = new User( email, password);
 
-        RetrofitClient.getInstance().getApiService().register(user).enqueue(new Callback<Void>() {
-            @Override
-            public void onResponse(Call<Void> call, Response<Void> response) {
-                if (response.isSuccessful()) {
-                    Toast.makeText(LoginRegisterActivity.this, "注册成功", Toast.LENGTH_SHORT).show();
+//    private void registerUser(String email, String password) {
+//        User user = new User( email, password);
+//
+//        RetrofitClient.getInstance().getApiService().register(user).enqueue(new Callback<Void>() {
+//            @Override
+//            public void onResponse(Call<Void> call, Response<Void> response) {
+//                if (response.isSuccessful()) {
+//                    Toast.makeText(LoginRegisterActivity.this, "注册成功", Toast.LENGTH_SHORT).show();
+//                    Intent intent = new Intent(LoginRegisterActivity.this, LoginRegisterActivity.class);
+//                    startActivity(intent);
+//                    finish();
+//                } else {
+//                    Toast.makeText(LoginRegisterActivity.this, "注册失败", Toast.LENGTH_SHORT).show();
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(Call<Void> call, Throwable t) {
+//                Toast.makeText(LoginRegisterActivity.this, "注册请求失败", Toast.LENGTH_SHORT).show();
+//            }
+//        });
+//    }
+private void registerUser(String email, String password) {
+    User user = new User(email, password);
+
+    RetrofitClient.getInstance().getApiService().register(user).enqueue(new Callback<Result>() {
+        @Override
+        public void onResponse(Call<Result> call, Response<Result> response) {
+            if (response.isSuccessful() && response.body() != null) {
+                Result result = response.body();
+                if (result.getCode() == 1) {  // 注册成功
+                    Toast.makeText(LoginRegisterActivity.this, "注册成功: " + result.getMsg(), Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(LoginRegisterActivity.this, LoginRegisterActivity.class);
                     startActivity(intent);
                     finish();
                 } else {
-                    Toast.makeText(LoginRegisterActivity.this, "注册失败", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(LoginRegisterActivity.this, "注册失败: " + result.getMsg(), Toast.LENGTH_SHORT).show();
                 }
+            } else {
+                Toast.makeText(LoginRegisterActivity.this, "注册失败: 无效的响应", Toast.LENGTH_SHORT).show();
             }
+        }
 
-            @Override
-            public void onFailure(Call<Void> call, Throwable t) {
-                Toast.makeText(LoginRegisterActivity.this, "注册请求失败", Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
+        @Override
+        public void onFailure(Call<Result> call, Throwable t) {
+            Toast.makeText(LoginRegisterActivity.this, "注册请求失败: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+        }
+    });
+}
+
 }
