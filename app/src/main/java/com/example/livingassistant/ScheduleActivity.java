@@ -1,10 +1,14 @@
 package com.example.livingassistant;
 
+import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.app.PendingIntent;
 import android.app.TimePickerDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -176,9 +180,11 @@ private void saveSchedule(ScheduleItem newItem) {
 
             if (response.isSuccessful()) {
                 Log.d("API", "Schedule added successfully");
+
+                // 在日程保存成功后，设置提醒
+                scheduleReminder(newItem);  // 这里调用提醒设置的方法
             } else {
                 Log.e("API Error", "Error adding schedule: " + response.code() + " " + response.message());
-                // Optionally log the response body for debugging
                 try {
                     if (response.errorBody() != null) {
                         Log.e("API Error", "Response error body: " + response.errorBody().string());
@@ -254,4 +260,38 @@ private void saveSchedule(ScheduleItem newItem) {
             }
         }
     }
+
+    private void scheduleReminder(ScheduleItem item) {
+        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+
+        // 创建一个 PendingIntent，触发 BroadcastReceiver 来显示通知
+        Intent intent = new Intent(this, ReminderReceiver.class);
+        intent.putExtra("title", item.getTitle());
+        intent.putExtra("event", item.getEvent());
+
+//        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, item.getId(), intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(
+                this,
+                0,
+                intent,
+                PendingIntent.FLAG_IMMUTABLE // 使用 FLAG_IMMUTABLE 标志
+        );
+        // 设置提醒时间
+        Calendar calendar = Calendar.getInstance();
+        try {
+            calendar.setTime(dateFormat.parse(item.getTime()));  // 根据日程时间设置提醒
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        // 设置定时提醒，考虑 API 版本
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
+        } else {
+            alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
+        }
+
+
+    }
+
 }
