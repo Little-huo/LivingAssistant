@@ -11,12 +11,14 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class ChangePasswordActivity extends AppCompatActivity {
 
     private EditText editTextOldPassword, editTextNewPassword, editTextConfirmPassword;
     private Button submitButton;
-
-    private UserDatabaseHelper dbHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,8 +30,6 @@ public class ChangePasswordActivity extends AppCompatActivity {
         editTextNewPassword = findViewById(R.id.editTextNewPassword);
         editTextConfirmPassword = findViewById(R.id.editTextConfirmPassword);
         submitButton = findViewById(R.id.submitButton);
-
-        dbHelper = new UserDatabaseHelper(this);
 
         // 提交按钮点击事件
         submitButton.setOnClickListener(new View.OnClickListener() {
@@ -57,8 +57,22 @@ public class ChangePasswordActivity extends AppCompatActivity {
 
         String currentUserEmail = getCurrentUserEmail();
         if (currentUserEmail != null) {
-            if (dbHelper.checkUser(currentUserEmail, oldPassword)) {
-                if (dbHelper.updatePassword(currentUserEmail, newPassword)) {
+            // 调用后端 API 更改密码
+            updatePassword(currentUserEmail, oldPassword, newPassword);
+        } else {
+            Toast.makeText(ChangePasswordActivity.this, "用户未登录", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    // 调用后端 API 更改密码
+    private void updatePassword(String email, String oldPassword, String newPassword) {
+        PasswordUpdateDTO passwordUpdateDTO = new PasswordUpdateDTO(email, oldPassword, newPassword);
+
+        // 使用 Retrofit 调用后端 API
+        RetrofitClient.getInstance().getApiService().updatePassword(passwordUpdateDTO).enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                if (response.isSuccessful()) {
                     Toast.makeText(ChangePasswordActivity.this, "密码更改成功", Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(ChangePasswordActivity.this, MainActivity.class);
                     startActivity(intent);
@@ -66,12 +80,13 @@ public class ChangePasswordActivity extends AppCompatActivity {
                 } else {
                     Toast.makeText(ChangePasswordActivity.this, "密码更改失败，请重试", Toast.LENGTH_SHORT).show();
                 }
-            } else {
-                Toast.makeText(ChangePasswordActivity.this, "旧密码错误", Toast.LENGTH_SHORT).show();
             }
-        } else {
-            Toast.makeText(ChangePasswordActivity.this, "用户未登录", Toast.LENGTH_SHORT).show();
-        }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+                Toast.makeText(ChangePasswordActivity.this, "网络请求失败，请稍后重试", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     // 获取当前用户的邮箱
