@@ -3,7 +3,6 @@ package com.example.livingassistant;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -11,38 +10,34 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
-import java.util.Set;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class ScheduleActivity extends AppCompatActivity implements ScheduleAdapter.OnDeleteClickListener {
 
-    private static final int REQUEST_CODE_DETAIL = 1;
-    private static final String PREFS_NAME = "SchedulePrefs";
-    private static final String SCHEDULE_KEY = "ScheduleList";
-
+    private static final String PREFS_NAME = "user_prefs";
     private RecyclerView scheduleRecyclerView;
     private ScheduleAdapter scheduleAdapter;
     private List<ScheduleItem> scheduleList;
-    private SharedPreferences sharedPreferences;
-    private Set<String> scheduleSet;
     private TextView noSchedulesText;
-
-    private SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy年MM月dd日 HH:mm", Locale.CHINA);
+    private SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.CHINA);
+//    private SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy年MM月dd日 HH:mm", Locale.CHINA);
+    private String currentUserEmail;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,11 +48,12 @@ public class ScheduleActivity extends AppCompatActivity implements ScheduleAdapt
         Button addScheduleButton = findViewById(R.id.add_schedule_button);
         noSchedulesText = findViewById(R.id.no_schedules_text);
 
-        sharedPreferences = getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
-        scheduleSet = sharedPreferences.getStringSet(SCHEDULE_KEY, new HashSet<>());
+        // 从 SharedPreferences 中获取当前登录的用户 email
+        SharedPreferences sharedPreferences = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        currentUserEmail = sharedPreferences.getString("current_user_email", null);
 
         scheduleList = new ArrayList<>();
-        loadSchedules();
+        loadSchedules(currentUserEmail);
 
         scheduleAdapter = new ScheduleAdapter(scheduleList, this);
         scheduleRecyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -67,8 +63,6 @@ public class ScheduleActivity extends AppCompatActivity implements ScheduleAdapt
     }
 
     private void openCreateScheduleDialog() {
-        Log.d("openCreateScheduleDialog", "openCreateScheduleDialog: ...");
-
         // 加载自定义布局
         LayoutInflater inflater = getLayoutInflater();
         View dialogView = inflater.inflate(R.layout.dialog_schedule, null);
@@ -77,10 +71,10 @@ public class ScheduleActivity extends AppCompatActivity implements ScheduleAdapt
         final EditText eventInput = dialogView.findViewById(R.id.schedule_event);
 
         // 创建一个 AlertDialog
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle(R.string.create_schedule)  // 使用中文标题
-                .setView(dialogView)  // 将自定义布局添加到对话框中
-                .setPositiveButton(R.string.ok, (dialog, which) -> {  // 使用中文按钮文本
+        new AlertDialog.Builder(this)
+                .setTitle(R.string.create_schedule)
+                .setView(dialogView)
+                .setPositiveButton(R.string.ok, (dialog, which) -> {
                     Calendar calendar = Calendar.getInstance();
                     new DatePickerDialog(this, (view, year, month, dayOfMonth) -> {
                         calendar.set(Calendar.YEAR, year);
@@ -93,50 +87,135 @@ public class ScheduleActivity extends AppCompatActivity implements ScheduleAdapt
 
                             String title = titleInput.getText().toString().trim();
                             String event = eventInput.getText().toString().trim();
-                            String scheduleTime = dateFormat.format(calendar.getTime());  // 格式化时间
+                            String scheduleTime = dateFormat.format(calendar.getTime());
 
                             if (!title.isEmpty() && !event.isEmpty()) {
-                                ScheduleItem newItem = new ScheduleItem(title, event, scheduleTime);
+                                ScheduleItem newItem = new ScheduleItem(currentUserEmail, title, event, scheduleTime);
                                 scheduleList.add(newItem);
                                 saveSchedule(newItem);
                                 scheduleAdapter.notifyDataSetChanged();
                                 updateNoSchedulesTextVisibility();
-                            } else {
-                                Log.d("openCreateScheduleDialog", "Title or event text is empty.");
                             }
                         }, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), true).show();
 
                     }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)).show();
                 })
-                .setNegativeButton(R.string.cancel, (dialog, which) -> {
-                    // 用户点击 Cancel 按钮时关闭对话框
-                    dialog.dismiss();
-                });
-
-        // 显示对话框
-        AlertDialog dialog = builder.create();
-        dialog.show();
+                .setNegativeButton(R.string.cancel, (dialog, which) -> dialog.dismiss())
+                .show();
     }
 
-    private void loadSchedules() {
-        for (String scheduleString : scheduleSet) {
-            String[] parts = scheduleString.split(";");
-            if (parts.length == 3) {
-                scheduleList.add(new ScheduleItem(parts[0], parts[1], parts[2]));
+    private void loadSchedules(String email) {
+        ScheduleApi api = ApiClient.getClient().create(ScheduleApi.class);
+        Call<List<ScheduleItem>> call = api.getSchedulesByEmail(email);
+
+        call.enqueue(new Callback<List<ScheduleItem>>() {
+            @Override
+            public void onResponse(Call<List<ScheduleItem>> call, Response<List<ScheduleItem>> response) {
+                if (response.isSuccessful()) {
+                    scheduleList.clear();
+                    scheduleList.addAll(response.body());
+                    scheduleAdapter.notifyDataSetChanged();
+                    updateNoSchedulesTextVisibility();
+                } else {
+                    Log.e("API Error", "Error fetching schedules");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<ScheduleItem>> call, Throwable t) {
+                Log.e("API Error", "Failed to fetch schedules", t);
+            }
+        });
+    }
+
+
+//private void saveSchedule(ScheduleItem newItem) {
+//    ScheduleApi api = ApiClient.getClient().create(ScheduleApi.class);
+//    Call<Void> call = api.addSchedule(newItem);
+//
+//    call.enqueue(new Callback<Void>() {
+//        @Override
+//        public void onResponse(Call<Void> call, Response<Void> response) {
+//            // Print request URL, headers, and body
+//            Log.d("API Request", "URL: " + call.request().url());
+//            Log.d("API Request", "Headers: " + call.request().headers());
+//            Log.d("API Request", "Request body: " + call.request().body());
+//
+//            if (response.isSuccessful()) {
+//                Log.d("API", "Schedule added successfully");
+//            } else {
+//                Log.e("API Error", "Error adding schedule: " + response.code() + " " + response.message());
+//                // Optionally log the response body for debugging
+//                try {
+//                    if (response.errorBody() != null) {
+//                        Log.e("API Error", "Response error body: " + response.errorBody().string());
+//                    }
+//                } catch (IOException e) {
+//                    Log.e("API Error", "Error reading response error body", e);
+//                }
+//            }
+//        }
+//
+//        @Override
+//        public void onFailure(Call<Void> call, Throwable t) {
+//            Log.e("API Error", "Failed to add schedule", t);
+//        }
+//    });
+//}
+private void saveSchedule(ScheduleItem newItem) {
+    ScheduleApi api = ApiClient.getClient().create(ScheduleApi.class);
+    Call<Void> call = api.addSchedule(newItem);
+
+    call.enqueue(new Callback<Void>() {
+        @Override
+        public void onResponse(Call<Void> call, Response<Void> response) {
+            // Print request URL, headers, and body
+            Log.d("API Request", "URL: " + call.request().url());
+            Log.d("API Request", "Headers: " + call.request().headers());
+            Log.d("API Request", "Request body: " + call.request().body());
+
+            if (response.isSuccessful()) {
+                Log.d("API", "Schedule added successfully");
+            } else {
+                Log.e("API Error", "Error adding schedule: " + response.code() + " " + response.message());
+                // Optionally log the response body for debugging
+                try {
+                    if (response.errorBody() != null) {
+                        Log.e("API Error", "Response error body: " + response.errorBody().string());
+                    }
+                } catch (IOException e) {
+                    Log.e("API Error", "Error reading response error body", e);
+                }
             }
         }
-        updateNoSchedulesTextVisibility();
-    }
 
-    private void saveSchedule(ScheduleItem item) {
-        Log.d("saveSchedule", "saveSchedule: ...");
-        scheduleSet.add(item.getTitle() + ";" + item.getEvent() + ";" + item.getTime());
-        sharedPreferences.edit().putStringSet(SCHEDULE_KEY, scheduleSet).apply();
-    }
+        @Override
+        public void onFailure(Call<Void> call, Throwable t) {
+            Log.e("API Error", "Failed to add schedule", t);
+        }
+    });
+}
+
 
     private void removeSchedule(ScheduleItem item) {
-        scheduleSet.remove(item.getTitle() + ";" + item.getEvent() + ";" + item.getTime());
-        sharedPreferences.edit().putStringSet(SCHEDULE_KEY, scheduleSet).apply();
+        ScheduleApi api = ApiClient.getClient().create(ScheduleApi.class);
+        Call<Void> call = api.deleteSchedule(item.getId());
+
+        call.enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                if (response.isSuccessful()) {
+                    Log.d("API", "Schedule deleted successfully");
+                } else {
+                    Log.e("API Error", "Error deleting schedule");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+                Log.e("API Error", "Failed to delete schedule", t);
+            }
+        });
     }
 
     @Override

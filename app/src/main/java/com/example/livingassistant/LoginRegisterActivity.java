@@ -82,34 +82,7 @@ public class LoginRegisterActivity extends AppCompatActivity {
         }
     }
 
-//    private void loginUser(String email, String password) {
-//        LoginRequest loginRequest = new LoginRequest(email, password);
-//        Log.d("loginUser", loginRequest.getEmail()+loginRequest.getPassword());
-//
-//        RetrofitClient.getInstance().getApiService().login(loginRequest).enqueue(new Callback<Void>() {
-//            @Override
-//            public void onResponse(Call<Void> call, Response<Void> response) {
-//                if (response.isSuccessful()) {
-//                    SharedPreferences sharedPreferences = getSharedPreferences("user_prefs", MODE_PRIVATE);
-//                    SharedPreferences.Editor editor = sharedPreferences.edit();
-//                    editor.putString("current_user_email", email);
-//                    editor.apply();
-//
-//                    Toast.makeText(LoginRegisterActivity.this, "登录成功", Toast.LENGTH_SHORT).show();
-//                    Intent intent = new Intent(LoginRegisterActivity.this, MainActivity.class);
-//                    startActivity(intent);
-//                    finish();
-//                } else {
-//                    Toast.makeText(LoginRegisterActivity.this, "登录失败", Toast.LENGTH_SHORT).show();
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(Call<Void> call, Throwable t) {
-//                Toast.makeText(LoginRegisterActivity.this, "登录请求失败", Toast.LENGTH_SHORT).show();
-//            }
-//        });
-//    }
+
 
     private void loginUser(String email, String password) {
         LoginRequest loginRequest = new LoginRequest(email, password);
@@ -146,28 +119,6 @@ public class LoginRegisterActivity extends AppCompatActivity {
     }
 
 
-//    private void registerUser(String email, String password) {
-//        User user = new User( email, password);
-//
-//        RetrofitClient.getInstance().getApiService().register(user).enqueue(new Callback<Void>() {
-//            @Override
-//            public void onResponse(Call<Void> call, Response<Void> response) {
-//                if (response.isSuccessful()) {
-//                    Toast.makeText(LoginRegisterActivity.this, "注册成功", Toast.LENGTH_SHORT).show();
-//                    Intent intent = new Intent(LoginRegisterActivity.this, LoginRegisterActivity.class);
-//                    startActivity(intent);
-//                    finish();
-//                } else {
-//                    Toast.makeText(LoginRegisterActivity.this, "注册失败", Toast.LENGTH_SHORT).show();
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(Call<Void> call, Throwable t) {
-//                Toast.makeText(LoginRegisterActivity.this, "注册请求失败", Toast.LENGTH_SHORT).show();
-//            }
-//        });
-//    }
 private void registerUser(String email, String password) {
     User user = new User(email, password);
 
