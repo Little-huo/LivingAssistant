@@ -10,17 +10,6 @@ import retrofit2.http.Query;
 
 import java.util.List;
 
-//public interface ScheduleApi {
-//
-//    @GET("/schedules/{email}")
-//    Call<List<ScheduleItem>> getSchedulesByEmail(@Path("email") String email);
-//
-//    @POST("/schedules/add")
-//    Call<Void> addSchedule(@Body ScheduleItem scheduleItem);
-//
-//    @DELETE("/schedules/{scheduleId}")
-//    Call<Void> deleteSchedule(@Path("scheduleId") int scheduleId);
-//}
 public interface ScheduleApi {
     @POST("schedules/add")
     Call<Void> addSchedule(@Body ScheduleItem scheduleItem);

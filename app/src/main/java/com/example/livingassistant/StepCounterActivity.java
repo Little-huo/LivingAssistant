@@ -119,7 +119,7 @@ public class StepCounterActivity extends AppCompatActivity implements StepCounte
 
     private void fetchHealthInfo(String email) {
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://192.168.168.41:8080") // 替换为你的后端地址
+                .baseUrl("http://192.168.168.41:8080")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 

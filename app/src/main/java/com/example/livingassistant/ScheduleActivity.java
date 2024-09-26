@@ -133,39 +133,6 @@ public class ScheduleActivity extends AppCompatActivity implements ScheduleAdapt
     }
 
 
-//private void saveSchedule(ScheduleItem newItem) {
-//    ScheduleApi api = ApiClient.getClient().create(ScheduleApi.class);
-//    Call<Void> call = api.addSchedule(newItem);
-//
-//    call.enqueue(new Callback<Void>() {
-//        @Override
-//        public void onResponse(Call<Void> call, Response<Void> response) {
-//            // Print request URL, headers, and body
-//            Log.d("API Request", "URL: " + call.request().url());
-//            Log.d("API Request", "Headers: " + call.request().headers());
-//            Log.d("API Request", "Request body: " + call.request().body());
-//
-//            if (response.isSuccessful()) {
-//                Log.d("API", "Schedule added successfully");
-//            } else {
-//                Log.e("API Error", "Error adding schedule: " + response.code() + " " + response.message());
-//                // Optionally log the response body for debugging
-//                try {
-//                    if (response.errorBody() != null) {
-//                        Log.e("API Error", "Response error body: " + response.errorBody().string());
-//                    }
-//                } catch (IOException e) {
-//                    Log.e("API Error", "Error reading response error body", e);
-//                }
-//            }
-//        }
-//
-//        @Override
-//        public void onFailure(Call<Void> call, Throwable t) {
-//            Log.e("API Error", "Failed to add schedule", t);
-//        }
-//    });
-//}
 private void saveSchedule(ScheduleItem newItem) {
     ScheduleApi api = ApiClient.getClient().create(ScheduleApi.class);
     Call<Void> call = api.addSchedule(newItem);

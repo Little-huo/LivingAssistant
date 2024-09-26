@@ -69,10 +69,12 @@ public class WeatherDetailActivity extends AppCompatActivity {
                 return R.drawable.ic_qingtian;
             case "多云":
                 return R.drawable.ic_duoyun;
-            case "雨天":
+            case "小雨":
                 return R.drawable.ic_yu;
             case "雪天":
                 return R.drawable.ic_xue;
+            case "阴":
+                return R.drawable.ic_yintian;
             default:
                 return R.drawable.ic_tq; // 默认图标
         }

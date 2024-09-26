@@ -1,4 +1,4 @@
-package com.example.livingassistant;// HealthInfoService.java
+package com.example.livingassistant;
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Path;
